@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Formulir</title>
+    <style>
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background-color: #95b1ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: #fffdf5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(67, 57, 149, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body> 
+   <div class="container">
+    <h2>Hasil Formulir Data Diri</h2>  
+        <div id="result">
+            <!-- Data akan dimuat di sini oleh JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = JSON.parse(localStorage.getItem('formData'));
+
+            if (data) {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `
+                    <div class="result-item">Nama saya: ${data.text}</div>
+                    <div class="result-item">Umur saya: ${calculateAge(data.dob)} tahun</div>
+                    <div class="result-item">Jenis kelamin saya: ${data.gender === 'male' ? 'Laki Laki' : 'Perempuan'}</div>
+                    <div class="result-item">Agama saya: ${getReligion(data.dropdown)}</div>
+                    <div class="result-item">Saya ${data.number} bersaudara</div>
+                    <div class="result-item">Saya sudah lulus: ${getEducation(data.education)}</div>
+                    <div class="result-item">Email saya: ${data.email}</div>
+                `;
+            }
+
+            // Helper functions
+            function calculateAge(dob) {
+                const dateOfBirth = new Date(dob);
+                const today = new Date();
+                let age = today.getFullYear() - dateOfBirth.getFullYear();
+                const monthDifference = today.getMonth() - dateOfBirth.getMonth();
+                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dateOfBirth.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            function getReligion(value) {
+                const religions = {
+                    '1': 'Islam',
+                    '2': 'Kristen',
+                    '3': 'Katholik',
+                    '4': 'Buddha',
+                    '5': 'Konghucu',
+                    '6': 'Hindu'
+                };
+                return religions[value] || 'Tidak diketahui';
+            }
+
+            function getEducation(values) {
+                if (!values) return 'Tidak ada';
+                const educations = {
+                    'SD': 'SD',
+                    'SMP': 'SMP',
+                    'SMA': 'SMA',
+                    'Kuliah': 'Kuliah'
+                };
+                return values.map(value => educations[value]).join(', ');
+            }
+        });
+    </script>
+</body>
+</html>
