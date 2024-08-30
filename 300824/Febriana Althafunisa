@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Data Diri</title>
+
+    <style>
+        body {
+            background-image: url('./gambar.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            color:white;
+        }
+           /*  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background-color: #95b1ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+            */
+
+        .container {
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgb(82, 14, 243);
+            border-radius: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .form-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .form-group button {
+            background-color: #364c84;
+            color: #f1e1e1;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        input:focus {
+            outline-color: red;
+        }
+
+        .form-group button:hover {
+            background-color: #95b1ee;
+        }
+
+        #age {
+            font-size: 14px;
+            color: #1d1b20;
+            margin-top: 5px;
+        }
+        .form-group button:active
+        {
+            background-color: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       
+        <form id="form">
+            <h2 style="text-align: center;">Formulir Data Diri</h2>
+            <!-- Untuk membuat Text -->
+            <div class="form-group">
+                <label for="text">Nama Lengkap</label>
+                <input type="text" id="text" name="text" required>
+            </div>
+
+            <!-- Untuk Membuat Tanggal Lahir -->
+            <div class="form-group">
+                <label for="dob">Tanggal Lahir</label>
+                <input type="date" id="dob" name="dob" required aria-required="true" max="">
+                <div id="age"></div>
+            </div>
+
+            <!-- Untuk membuat Radio Button -->
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <label><input type="radio" name="gender" value="male" required>Laki Laki</label>
+                <label><input type="radio" name="gender" value="female" required>Perempuan</label>
+            </div>
+
+            <!-- Untuk membuat Dropdown -->
+            <div class="form-group">
+                <label for="dropdown">Agama</label>
+                <select id="dropdown" name="dropdown" required>
+                    <option value="">Pilih</option>
+                    <option value="1">Islam</option>
+                    <option value="2">Kristen</option>
+                    <option value="3">Katholik</option>
+                    <option value="4">Buddha</option>
+                    <option value="5">Konghucu</option>
+                    <option value="6">Hindu</option>
+                </select>
+            </div>
+
+            <!-- Untuk membuat Angka -->
+            <div class="form-group">
+                <label for="number">Saudara</label>
+                <input type="number" id="number" name="number" required>
+            </div>
+
+            <!-- Untuk membuat Checkbox -->
+            <div class="form-group">
+                <label>Pendidikan</label>
+                <input type="checkbox" id="sd" name="education" value="SD"> SD <br>
+                <input type="checkbox" id="smp" name="education" value="SMP"> SMP <br>
+                <input type="checkbox" id="sma" name="education" value="SMA"> SMA <br>
+                <input type="checkbox" id="kuliah" name="education" value="Kuliah"> Kuliah
+            </div>
+
+            <!-- Untuk membuat Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- Untuk membuat Password -->
+            <div class="form-group">
+                <label for="password">Kata Sandi</label>
+                <input type="password" id="password" name="password">
+            </div>
+
+            <!-- Untuk membuat Button/Tombol -->
+            <div class="form-group">
+                <button type="submit">Kirim</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Script untuk menampilkan umur saat tanggal lahir diisi
+        document.getElementById('dob').addEventListener('input', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            document.getElementById('age').innerText = `Umur: ${age} tahun`;
+        });
+
+                document.getElementById('dob').max = new Date().toISOString().split("T")[0];
+        
+        // Mencegah pengiriman default dan mengumpulkan data
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Mengumpulkan data dari formulir
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key === 'education') {
+                    data[key] = data[key] || [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Menyimpan data dan mengarahkan ke halaman hasil
+            localStorage.setItem('formData', JSON.stringify(data));
+            window.location.href = 'result.html';
+        });
+    </script>
+</body>
+</html>
